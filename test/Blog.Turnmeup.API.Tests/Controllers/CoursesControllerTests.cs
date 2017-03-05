@@ -52,13 +52,13 @@ namespace Blog.Turnmeup.API.Tests.Controllers
                     .Returns((Expression<Func<Course, bool>> exp) => entities.AsQueryable().Where(exp));
 
             Repository.Setup(x => x.Insert(It.IsAny<Course>()))
-                .Callback((Course label) => entities.Add(label));
+                .Callback((Course entity) => entities.Add(entity));
 
             Repository.Setup(x => x.Update(It.IsAny<Course>()))
-                .Callback((Course label) => entities[entities.FindIndex(x => x.Id == label.Id)] = label);
+                .Callback((Course entity) => entities[entities.FindIndex(x => x.Id == entity.Id)] = entity);
 
             Repository.Setup(x => x.Delete(It.IsAny<Course>()))
-                .Callback((Course label) => entities.RemoveAt(entities.FindIndex(x => x.Id == label.Id)));
+                .Callback((Course entity) => entities.RemoveAt(entities.FindIndex(x => x.Id == entity.Id)));
 
 
             var imapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
