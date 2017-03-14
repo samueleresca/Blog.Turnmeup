@@ -21,11 +21,11 @@ namespace Blog.Turnmeup.API.Controllers
     public class CoursesController : Controller
     {
 
-        private readonly IBaseService<Course> _service;
+        private readonly ICourseService _service;
         private readonly IMapper _mapper;
         private readonly IErrorHandler _errorHandler;
 
-        public CoursesController(IBaseService<Course> service, IMapper mapper, IErrorHandler errorHandler)
+        public CoursesController(ICourseService service, IMapper mapper, IErrorHandler errorHandler)
         {
             _service = service;
             _mapper = mapper;

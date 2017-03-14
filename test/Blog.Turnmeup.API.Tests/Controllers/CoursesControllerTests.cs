@@ -22,7 +22,7 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
         private Mock<IBaseRepository<Course>> Repository { get; }
 
-        private IBaseService<Course> Service { get; }
+        private ICourseService Service { get; }
 
         private CoursesController Controller { get; }
 
@@ -65,7 +65,8 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             var ierrorHandler = (IErrorHandler)fixture.Server.Host.Services.GetService(typeof(IErrorHandler));
 
             //SERVICES CONFIGURATIONS
-            Service = new BaseService<Course>(Repository.Object);
+            var baseService= new BaseService<Course>(Repository.Object);
+            Service = new CourseService(baseService);
             Controller = new CoursesController(Service, imapper, ierrorHandler);
         }
 

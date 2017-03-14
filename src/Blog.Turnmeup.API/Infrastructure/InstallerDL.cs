@@ -14,10 +14,9 @@ namespace Blog.Turnmeup.API.Infrastructure
         {
             services.AddDbContext<DataContext>();
         
-            //LABEL REPOSITORY
             services.AddTransient<IBaseRepository<Course>, BaseRepository<Course>>();
             services.AddTransient<IBaseService<Course>, BaseService<Course>>();
-           
+            services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IErrorHandler, ErrorHandler>();
         }
 

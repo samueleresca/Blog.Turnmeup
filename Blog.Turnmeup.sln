@@ -1,26 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4008421C-FFE7-4EF5-9F95-C56C869B39A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4548E54F-ECBD-4D62-8333-57A4E38DBF7E}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blog.Turnmeup.DAL", "src\Blog.Turnmeup.DAL\Blog.Turnmeup.DAL.xproj", "{E461CE6B-B634-41DD-A22C-9E5C831F7DCC}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blog.Turnmeup.DL", "src\Blog.Turnmeup.DL\Blog.Turnmeup.DL.xproj", "{835E30FB-DC79-4E94-A03F-E734EFFEAB5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{967E33BC-9E96-4588-84CE-435D8B788501}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blog.Turnmeup.DL.Tests", "test\Blog.Turnmeup.DL.Tests\Blog.Turnmeup.DL.Tests.xproj", "{F1CEB6E7-84FA-4D4E-B3F9-88D8D385DA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Turnmeup.DAL", "src\Blog.Turnmeup.DAL\Blog.Turnmeup.DAL.csproj", "{E461CE6B-B634-41DD-A22C-9E5C831F7DCC}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blog.Turnmeup.API", "src\Blog.Turnmeup.API\Blog.Turnmeup.API.xproj", "{388D81B9-E725-4D45-B44D-ED2F561A99FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Turnmeup.DL", "src\Blog.Turnmeup.DL\Blog.Turnmeup.DL.csproj", "{835E30FB-DC79-4E94-A03F-E734EFFEAB5F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blog.Turnmeup.API.Tests", "test\Blog.Turnmeup.API.Tests\Blog.Turnmeup.API.Tests.xproj", "{D894924B-946E-49AB-BEC5-D165F8227D64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Turnmeup.DL.Tests", "test\Blog.Turnmeup.DL.Tests\Blog.Turnmeup.DL.Tests.csproj", "{F1CEB6E7-84FA-4D4E-B3F9-88D8D385DA32}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Turnmeup.API", "src\Blog.Turnmeup.API\Blog.Turnmeup.API.csproj", "{388D81B9-E725-4D45-B44D-ED2F561A99FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Turnmeup.API.Tests", "test\Blog.Turnmeup.API.Tests\Blog.Turnmeup.API.Tests.csproj", "{D894924B-946E-49AB-BEC5-D165F8227D64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
