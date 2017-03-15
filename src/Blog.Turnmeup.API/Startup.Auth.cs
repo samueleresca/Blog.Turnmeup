@@ -1,0 +1,107 @@
+﻿using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Primitives;
+using Blog.Turnmeup.DAL.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Blog.Turnmeup.API
+{
+    public partial class Startup
+    {
+
+        // Initialize some test roles. In the real world, these would be setup explicitly by a role manager
+        private readonly string[] _roles = { "Task", "Tasker", "Administrator" };
+
+
+        private void ConfigureServicesAuth(IServiceCollection services)
+        {
+
+            services.AddDbContext<IdentityDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AuthServer"));
+                // Register the entity sets needed by OpenIddict.
+                // Note: use the generic overload if you need
+                // to replace the default OpenIddict entities.
+                options.UseOpenIddict();
+            });
+
+            // Register the Identity services.
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Register the OpenIddict services.
+            // Note: use the generic overload if you need
+            // to replace the default OpenIddict entities.
+            services.AddOpenIddict(options =>
+            {
+                // Register the Entity Framework stores.
+                options.AddEntityFrameworkCoreStores<IdentityDbContext>();
+
+                // Register the ASP.NET Core MVC binder used by OpenIddict.
+                // Note: if you don't call this method, you won't be able to
+                // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
+                options.AddMvcBinders();
+
+                // Enable the token endpoint (required to use the password flow).
+                options.EnableTokenEndpoint("/connect/token");
+
+                // Allow client applications to use the grant_type=password flow.
+                options.AllowPasswordFlow();
+
+                // During development, you can disable the HTTPS requirement.
+                options.DisableHttpsRequirement();
+            });
+
+           // TODO: Enable services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+           // services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+            services.AddIdentity<AppUser, IdentityRole>(opts => {
+                opts.Password.RequiredLength = 6;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireDigit = false;
+                opts.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@";
+            })
+            .AddEntityFrameworkStores<IdentityDbContext>()
+            .AddDefaultTokenProviders();
+
+            // Configure Identity to use the same JWT claims as OpenIddict instead
+            // of the legacy WS-Federation claims it uses by default (ClaimTypes),
+            // which saves you from doing the mapping in your authorization controller.
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
+                options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
+                options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
+            });
+        }
+
+
+        private void ConfigureAuth(IApplicationBuilder app)
+        {
+            app.UseIdentity();
+            app.UseOAuthValidation();
+            app.UseOpenIddict();
+        }
+
+
+        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager)
+        {
+            foreach (var role in _roles)
+            {
+                if (await roleManager.RoleExistsAsync(role)) continue;
+                var newRole = new IdentityRole(role);
+                await roleManager.CreateAsync(newRole);
+                // In the real world, there might be claims associated with roles
+                // _roleManager.AddClaimAsync(newRole, new )
+            }
+        }
+
+    }
+}

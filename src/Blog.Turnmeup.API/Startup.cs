@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Blog.Turnmeup.API
 {
-    public class Startup
+    public partial class Startup
     {
 
         private IConfigurationRoot Configuration { get; }
