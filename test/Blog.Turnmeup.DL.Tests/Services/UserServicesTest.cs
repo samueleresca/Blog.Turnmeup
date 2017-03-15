@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using Blog.Turnmeup.API;
 using Blog.Turnmeup.DAL.Models;
+using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Repositories;
 using Blog.Turnmeup.DL.Services;
 using Moq;
@@ -9,7 +12,7 @@ using Xunit;
 
 namespace Blog.Turnmeup.DL.Tests.Services
 {
-    public class UserServicesTest
+    public class UserServicesTest : IClassFixture<TestFixture<Startup>>
     {
 
         private Mock<IUsersRepository> Repository { get; }
@@ -18,7 +21,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
 
         private static readonly string UniqueId = Guid.NewGuid().ToString();
 
-        public UserServicesTest()
+        public UserServicesTest(TestFixture<Startup> fixture)
         {
 
 
@@ -50,8 +53,10 @@ namespace Blog.Turnmeup.DL.Tests.Services
             Repository.Setup(x => x.Delete(It.IsAny<AppUser>()))
             .Callback((AppUser label) => users.RemoveAt(users.FindIndex(x => x.Id == label.Id)));
 
+            var mapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
 
-            Service = new UsersService(Repository.Object);
+
+            Service = new UsersService(Repository.Object, mapper);
         }
 
         [Fact]
@@ -84,7 +89,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void InsertUser()
         {
             // Arrange
-            var user = new AppUser
+            var user = new UserResponseModel
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "testusername2",
@@ -103,7 +108,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void UpdateUser()
         {
             // Arrange
-            var user = new AppUser
+            var user = new UserResponseModel
             {
                 Id = UniqueId,
                 UserName = "testusername",

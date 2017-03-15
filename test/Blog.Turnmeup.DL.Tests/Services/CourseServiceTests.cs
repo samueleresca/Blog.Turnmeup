@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AutoMapper;
+using Blog.Turnmeup.API;
+using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Repositories;
 using Blog.Turnmeup.DL.Services;
 using Blog.Turnmeup.Models;
@@ -12,15 +15,15 @@ using Xunit;
 
 namespace Blog.Turnmeup.DL.Tests.Services
 {
-    public class CourseServiceTest
+    public class CourseServiceTest : IClassFixture<TestFixture<Startup>>
     {
 
         private Mock<IBaseRepository<Course>> Repository { get; }
 
-        private IBaseService<Course> Service { get; }
+        private ICourseService Service { get; }
 
 
-        public CourseServiceTest()
+        public CourseServiceTest(TestFixture<Startup> fixture)
         {
 
 
@@ -44,7 +47,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
                 .Returns((int id) => Task.Run(() => entity.Find(s => s.Id == id)));
 
 
-            Repository.Setup(x => x.Where(It.IsAny<Expression<Func<Course,bool>>>()))
+            Repository.Setup(x => x.Where(It.IsAny<Expression<Func<Course, bool>>>()))
                 .Returns((Expression<Func<Course, bool>> exp) => entity.AsQueryable().Where(exp));
 
 
@@ -57,8 +60,11 @@ namespace Blog.Turnmeup.DL.Tests.Services
             Repository.Setup(x => x.Delete(It.IsAny<Course>()))
             .Callback((Course label) => entity.RemoveAt(entity.FindIndex(x => x.Id == label.Id)));
 
+            var mapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
+            var baseService = new BaseService<Course>(Repository.Object);
 
-            Service = new BaseService<Course>(Repository.Object);
+
+            Service = new CourseService(baseService, mapper);
         }
 
         [Fact]
@@ -93,7 +99,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
             var courseId = 1;
 
             // Act
-            var filteredEntities = Service.Where(s=> s.Id == courseId).First();
+            var filteredEntities = Service.Where(s => s.Id == courseId).First();
 
             // Assert
             Repository.Verify(x => x.Where(s => s.Id == courseId), Times.Once);
@@ -105,10 +111,10 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void Can_Insert_Entity()
         {
             // Arrange
-            var entity = new Course
+            var entity = new CourseResponseModel
             {
                 Id = 2,
-                Title="Course 2",
+                Title = "Course 2",
                 DateAdded = DateTime.MaxValue
             };
 
@@ -128,7 +134,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void Can_Update_Entity()
         {
             // Arrange
-            var entity = new Course
+            var entity = new CourseResponseModel
             {
                 Id = 1,
                 Title = "Course 2 ",

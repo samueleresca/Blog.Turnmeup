@@ -26,7 +26,7 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
         private CoursesController Controller { get; }
 
-        public CoursesControllerTests(TestFixture<API.Startup> fixture)
+        public CoursesControllerTests(TestFixture<Startup> fixture)
         {
             //Arrange
             var entities = new List<Course>

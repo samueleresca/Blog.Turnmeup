@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Blog.Turnmeup.DAL.Models;
+using Blog.Turnmeup.DL.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Blog.Turnmeup.DL.Repositories

@@ -21,18 +21,18 @@ namespace Blog.Turnmeup.API.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService _usersService;
-        private readonly IMapper _mapper;
+  
         private readonly IErrorHandler _errorHandler;
-        private readonly IUserValidator<AppUser> _userValidator;
-        private readonly IPasswordValidator<AppUser> _passwordValidator;
-        private readonly IPasswordHasher<AppUser> _passwordHasher;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUserValidator<UserResponseModel> _userValidator;
+        private readonly IPasswordValidator<UserResponseModel> _passwordValidator;
+        private readonly IPasswordHasher<UserResponseModel> _passwordHasher;
+        private readonly SignInManager<UserResponseModel> _signInManager;
 
-        public UsersController(IUsersService usersService, IErrorHandler errorHandler, IMapper mapper, IUserValidator<AppUser> userValidator, IPasswordValidator<AppUser> passwordValidator, IPasswordHasher<AppUser> passwordHasher, SignInManager<AppUser> signInManager)
+
+        public UsersController(IUsersService usersService, IErrorHandler errorHandler, IMapper mapper, IUserValidator<UserResponseModel> userValidator, IPasswordValidator<UserResponseModel> passwordValidator, IPasswordHasher<UserResponseModel> passwordHasher, SignInManager<UserResponseModel> signInManager)
         {
             _usersService = usersService;
             _errorHandler = errorHandler;
-            _mapper = mapper;
             _userValidator = userValidator;
             _passwordValidator = passwordValidator;
             _passwordHasher = passwordHasher;
@@ -42,14 +42,7 @@ namespace Blog.Turnmeup.API.Controllers
         [HttpGet]
         public List<UserResponseModel> Get()
         {
-            var returnedList = new List<UserResponseModel>();
-
-            _usersService.Get().ToList().ForEach(u =>
-            {
-                returnedList.Add(_mapper.Map<AppUser, UserResponseModel>(u));
-            });
-
-            return returnedList;
+            return _usersService.Get().ToList();
         }
 
         [HttpPost("/api/[controller]/login")]
@@ -72,7 +65,7 @@ namespace Blog.Turnmeup.API.Controllers
 
             if (result.Succeeded)
             {
-                return _mapper.Map<AppUser, UserResponseModel>(user);
+                return user;
             }
 
             throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthWrongCredentials));
@@ -81,7 +74,7 @@ namespace Blog.Turnmeup.API.Controllers
         [HttpGet("{email}")]
         public UserResponseModel Get(string email)
         {
-            return _mapper.Map<AppUser, UserResponseModel>(_usersService.GetByEmail(email));
+            return _usersService.GetByEmail(email);
         }
 
 
@@ -94,7 +87,7 @@ namespace Blog.Turnmeup.API.Controllers
                     _errorHandler.GetMessage(ErrorMessagesEnum.ModelValidation),
                     ModelState.Values.First().Errors.First().ErrorMessage));
             }
-            var user = new AppUser
+            var user = new UserResponseModel
             {
                 UserName = model.Name,
                 Email = model.Email
@@ -104,7 +97,7 @@ namespace Blog.Turnmeup.API.Controllers
 
             if (result.Succeeded)
             {
-                return _mapper.Map<AppUser, UserResponseModel>(_usersService.GetByEmail(model.Email));
+                return _usersService.GetByEmail(model.Email);
             }
             throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthCannotCreate));
         }
@@ -127,7 +120,7 @@ namespace Blog.Turnmeup.API.Controllers
             var result = await _usersService.Delete(user);
             if (result.Succeeded)
             {
-                return _mapper.Map<AppUser, UserResponseModel>(user);
+                return user;
             }
 
             throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthCannotDelete));
@@ -173,7 +166,7 @@ namespace Blog.Turnmeup.API.Controllers
 
             if (result.Succeeded)
             {
-                return _mapper.Map<AppUser, UserResponseModel>(user);
+                return user;
             }
 
             throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthCannotUpdate));

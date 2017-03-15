@@ -7,6 +7,7 @@ using Blog.Turnmeup.API.Controllers;
 using Blog.Turnmeup.API.Models.Users;
 using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Infrastructure.ErrorHandler;
+using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Repositories;
 using Blog.Turnmeup.DL.Services;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
         private UsersController Controller { get; }
 
-        public UserControllerTests(TestFixture<Turnmeup.API.Startup> fixture)
+        public UserControllerTests(TestFixture<Startup> fixture)
         {
 
             var users = new List<AppUser>
@@ -56,13 +57,13 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
             var mapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
             var errorHandler = (IErrorHandler)fixture.Server.Host.Services.GetService(typeof(IErrorHandler));
-            var uservalidator = (IUserValidator<AppUser>)fixture.Server.Host.Services.GetService(typeof(IUserValidator<AppUser>));
-            var passwordvalidator = (IPasswordValidator<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordValidator<AppUser>));
-            var passwordhasher = (IPasswordHasher<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordHasher<AppUser>));
-            var signInManager = (SignInManager<AppUser>)fixture.Server.Host.Services.GetService(typeof(SignInManager<AppUser>));
+            var uservalidator = (IUserValidator<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(IUserValidator<UserResponseModel>));
+            var passwordvalidator = (IPasswordValidator<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(IPasswordValidator<UserResponseModel>));
+            var passwordhasher = (IPasswordHasher<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(IPasswordHasher<UserResponseModel>));
+            var signInManager = (SignInManager<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(SignInManager<UserResponseModel>));
 
             //SERVICES CONFIGURATIONS
-            Service = new UsersService(Repository);
+            Service = new UsersService(Repository, mapper);
             Controller = new UsersController(Service, errorHandler, mapper, uservalidator, passwordvalidator, passwordhasher, signInManager);
         }
 

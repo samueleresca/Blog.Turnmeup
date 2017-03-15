@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Blog.Turnmeup.API\Blog.Turnmeup.API.csproj" />
     <ProjectReference Include="..\..\src\Blog.Turnmeup.DAL\Blog.Turnmeup.DAL.csproj" />
     <ProjectReference Include="..\..\src\Blog.Turnmeup.DL\Blog.Turnmeup.DL.csproj" />
   </ItemGroup>
