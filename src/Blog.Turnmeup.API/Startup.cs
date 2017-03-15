@@ -47,7 +47,7 @@ namespace Blog.Turnmeup.API
             });
 
             //Configure DAL services
-            InstallerDl.ConfigureDALServices(services);
+            Installer.ConfigureServices(services);
             ConfigureServicesAuth(services);
            
         }

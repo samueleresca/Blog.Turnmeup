@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Blog.Turnmeup.DAL.Models;
+using Blog.Turnmeup.DL.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;

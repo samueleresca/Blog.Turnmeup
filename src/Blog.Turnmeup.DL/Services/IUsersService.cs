@@ -13,6 +13,11 @@ namespace Blog.Turnmeup.DL.Services
         Task<IdentityResult> Create(UserResponseModel user, string password);
         Task<IdentityResult> Delete(UserResponseModel user);
         Task<IdentityResult> Update(UserResponseModel user);
-        UserManager<UserResponseModel> GetUserManager();
+        Task<IdentityResult> ValidatePassword(UserResponseModel user, string password);
+        Task<IdentityResult> ValidateUser(UserResponseModel user);
+        string HashPassword(UserResponseModel user, string password);
+        Task SignOutAsync();
+        Task<SignInResult> PasswordSignInAsync(UserResponseModel user, string password, bool lockoutOnFailure,
+            bool isPersistent);
     }
 }

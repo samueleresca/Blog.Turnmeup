@@ -7,10 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.Turnmeup.API.Infrastructure
 {
-    internal static class InstallerDl
+    internal static class Installer
     {
 
-        public static void ConfigureDALServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>();
         

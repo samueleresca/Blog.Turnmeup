@@ -36,7 +36,7 @@ namespace Blog.Turnmeup.DL.Repositories
 
         public UserManager<AppUser> GetUserManager()
         {
-            return _userManager;
+            return  _userManager;
         }
     }
 }

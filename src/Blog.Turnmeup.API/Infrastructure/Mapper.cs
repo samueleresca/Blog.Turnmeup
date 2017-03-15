@@ -2,6 +2,7 @@
 using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Blog.Turnmeup.API.Infrastructure
 {
@@ -15,6 +16,9 @@ namespace Blog.Turnmeup.API.Infrastructure
 
             CreateMap<UserResponseModel, AppUser>();
             CreateMap<AppUser, UserResponseModel>();
+
+            CreateMap<UserManager<UserResponseModel>, UserManager<AppUser>>();
+            CreateMap<UserManager<AppUser>, UserManager<UserResponseModel>>();
         }
     }
 }

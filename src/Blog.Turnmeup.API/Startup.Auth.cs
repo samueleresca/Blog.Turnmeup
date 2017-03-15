@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using AspNet.Security.OpenIdConnect.Primitives;
+﻿using AspNet.Security.OpenIdConnect.Primitives;
 using Blog.Turnmeup.DAL.Models;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,8 +11,6 @@ namespace Blog.Turnmeup.API
     public partial class Startup
     {
 
-        // Initialize some test roles. In the real world, these would be setup explicitly by a role manager
-        private readonly string[] _roles = { "Task", "Tasker", "Administrator" };
 
 
         private void ConfigureServicesAuth(IServiceCollection services)
@@ -88,19 +84,5 @@ namespace Blog.Turnmeup.API
             app.UseIdentity();
             app.UseOpenIddict();
         }
-
-
-        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager)
-        {
-            foreach (var role in _roles)
-            {
-                if (await roleManager.RoleExistsAsync(role)) continue;
-                var newRole = new IdentityRole(role);
-                await roleManager.CreateAsync(newRole);
-                // In the real world, there might be claims associated with roles
-                // _roleManager.AddClaimAsync(newRole, new )
-            }
-        }
-
     }
 }

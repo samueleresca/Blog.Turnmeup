@@ -8,7 +8,6 @@ using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
 using AutoMapper;
 using Blog.Turnmeup.API.Models.Users;
-using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Infrastructure.ErrorHandler;
 using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Services;
@@ -23,20 +22,14 @@ namespace Blog.Turnmeup.API.Controllers
         private readonly IUsersService _usersService;
   
         private readonly IErrorHandler _errorHandler;
-        private readonly IUserValidator<UserResponseModel> _userValidator;
-        private readonly IPasswordValidator<UserResponseModel> _passwordValidator;
-        private readonly IPasswordHasher<UserResponseModel> _passwordHasher;
-        private readonly SignInManager<UserResponseModel> _signInManager;
+     
 
 
-        public UsersController(IUsersService usersService, IErrorHandler errorHandler, IMapper mapper, IUserValidator<UserResponseModel> userValidator, IPasswordValidator<UserResponseModel> passwordValidator, IPasswordHasher<UserResponseModel> passwordHasher, SignInManager<UserResponseModel> signInManager)
+        public UsersController(IUsersService usersService, IErrorHandler errorHandler)
         {
             _usersService = usersService;
             _errorHandler = errorHandler;
-            _userValidator = userValidator;
-            _passwordValidator = passwordValidator;
-            _passwordHasher = passwordHasher;
-            _signInManager = signInManager;
+          
         }
 
         [HttpGet]
@@ -59,8 +52,8 @@ namespace Blog.Turnmeup.API.Controllers
             if (user == null)
                 throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthUserDoesNotExists));
 
-            await _signInManager.SignOutAsync();
-            var result = await _signInManager.PasswordSignInAsync(
+            await _usersService.SignOutAsync();
+            var result = await _usersService.PasswordSignInAsync(
                 user, loginModel.Password, false, false);
 
             if (result.Succeeded)
@@ -136,7 +129,7 @@ namespace Blog.Turnmeup.API.Controllers
 
             user.Email = email;
 
-            var validEmail = await _userValidator.ValidateAsync(_usersService.GetUserManager(), user);
+            var validEmail = await _usersService.ValidateUser(user);
 
             if (!validEmail.Succeeded)
             {
@@ -147,11 +140,10 @@ namespace Blog.Turnmeup.API.Controllers
 
             if (!string.IsNullOrEmpty(password))
             {
-                validPass = await _passwordValidator.ValidateAsync(_usersService.GetUserManager(),
-                    user, password);
+                validPass = await _usersService.ValidatePassword(user, password);
                 if (validPass.Succeeded)
                 {
-                    user.PasswordHash = _passwordHasher.HashPassword(user,
+                    user.PasswordHash = _usersService.HashPassword(user,
                         password);
                 }
                 else
@@ -186,9 +178,9 @@ namespace Blog.Turnmeup.API.Controllers
             if (user == null) throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthUserDoesNotExists));
 
 
-            await _signInManager.SignOutAsync();
-            var result = await _signInManager.PasswordSignInAsync(
-                user, request.Password, false, false);
+            await _usersService.SignOutAsync();
+            var result = await _usersService.PasswordSignInAsync(
+                user, request.Password,false, false);
 
             if (!result.Succeeded) throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthCannotRetrieveToken));
 

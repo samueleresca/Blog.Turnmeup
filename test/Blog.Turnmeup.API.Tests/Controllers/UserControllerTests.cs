@@ -57,14 +57,14 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
             var mapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
             var errorHandler = (IErrorHandler)fixture.Server.Host.Services.GetService(typeof(IErrorHandler));
-            var uservalidator = (IUserValidator<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(IUserValidator<UserResponseModel>));
-            var passwordvalidator = (IPasswordValidator<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(IPasswordValidator<UserResponseModel>));
-            var passwordhasher = (IPasswordHasher<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(IPasswordHasher<UserResponseModel>));
-            var signInManager = (SignInManager<UserResponseModel>)fixture.Server.Host.Services.GetService(typeof(SignInManager<UserResponseModel>));
+            var uservalidator = (IUserValidator<AppUser>)fixture.Server.Host.Services.GetService(typeof(IUserValidator<AppUser>));
+            var passwordvalidator = (IPasswordValidator<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordValidator<AppUser>));
+            var passwordhasher = (IPasswordHasher<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordHasher<AppUser>));
+            var signInManager = (SignInManager<AppUser>)fixture.Server.Host.Services.GetService(typeof(SignInManager<AppUser>));
 
             //SERVICES CONFIGURATIONS
-            Service = new UsersService(Repository, mapper);
-            Controller = new UsersController(Service, errorHandler, mapper, uservalidator, passwordvalidator, passwordhasher, signInManager);
+            Service = new UsersService(Repository, mapper, uservalidator, passwordvalidator, passwordhasher, signInManager);
+            Controller = new UsersController(Service, errorHandler);
         }
 
 
