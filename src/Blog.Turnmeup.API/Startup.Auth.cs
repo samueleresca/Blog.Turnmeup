@@ -86,7 +86,6 @@ namespace Blog.Turnmeup.API
         private void ConfigureAuth(IApplicationBuilder app)
         {
             app.UseIdentity();
-            app.UseOAuthValidation();
             app.UseOpenIddict();
         }
 
