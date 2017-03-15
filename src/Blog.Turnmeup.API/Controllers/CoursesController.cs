@@ -22,13 +22,11 @@ namespace Blog.Turnmeup.API.Controllers
     {
 
         private readonly ICourseService _service;
-        private readonly IMapper _mapper;
         private readonly IErrorHandler _errorHandler;
-
+        
         public CoursesController(ICourseService service, IMapper mapper, IErrorHandler errorHandler)
         {
             _service = service;
-            _mapper = mapper;
             _errorHandler = errorHandler;
         }
 
@@ -38,22 +36,24 @@ namespace Blog.Turnmeup.API.Controllers
         public async Task<IEnumerable<CourseResponseModel>> Get()
         {
 
-            var result = await _service.Get();
-            return result.Select(t => _mapper.Map<Course, CourseResponseModel>(t));
+            return await _service.GetAsync();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<CourseResponseModel> Get([Required]int id)
         {
-            return _mapper.Map<Course, CourseResponseModel>(await _service.GetById(id));
+            return await _service.GetById(id);
         }
 
         [HttpGet("{fieldLabel}/{fieldValue}")]
         public List<CourseResponseModel> Where(string fieldLabel, string fieldValue)
         {
-            var whereResult = _service.Where(entity => (string)entity.GetType().GetProperty(fieldLabel).GetValue(entity, null) == fieldValue).ToList();
-            return _mapper.Map<List<Course>, List<CourseResponseModel>>(whereResult);
+
+            return
+                _service.Where(
+                    entity => (string) entity.GetType().GetProperty(fieldLabel).GetValue(entity, null) == fieldValue).ToList();
+
         }
 
         [HttpGet("where/criterias/{criteriasString}")]
@@ -61,10 +61,9 @@ namespace Blog.Turnmeup.API.Controllers
         {
 
             var criteriasModel = JsonConvert.DeserializeObject<WhereRequestModel>(criteriasString);
-            var whereResult = _service.Get().Result;
+            var whereResult = _service.GetAsync().Result;
             whereResult = criteriasModel.Criterias.Aggregate(whereResult, (current, attribute) => current.Where(entity => (string) entity.GetType().GetProperty(attribute.Key).GetValue(entity, null) == attribute.Value).AsEnumerable());
-
-            return _mapper.Map<List<Course>, List<CourseResponseModel>>(whereResult.ToList());
+            return whereResult.ToList();
         }
         // POST api/values
         [HttpPost]
@@ -75,7 +74,7 @@ namespace Blog.Turnmeup.API.Controllers
                 throw new HttpRequestException(string.Format(_errorHandler.GetMessage(ErrorMessagesEnum.ModelValidation), "", ModelState.Values.First().Errors.First().ErrorMessage));
             }
 
-            _service.AddOrUpdate(_mapper.Map<CourseResponseModel, Course>(entity));
+            _service.AddOrUpdate(entity);
         }
 
 

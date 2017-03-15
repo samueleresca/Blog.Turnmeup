@@ -16,7 +16,7 @@ namespace Blog.Turnmeup.DL.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<T>>  Get()
+        public async Task<IEnumerable<T>>  GetAsync()
         {
             return  await _repository.GetAll();
         }

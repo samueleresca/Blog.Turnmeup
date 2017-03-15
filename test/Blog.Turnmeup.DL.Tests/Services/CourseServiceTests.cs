@@ -65,7 +65,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void Can_Get_All()
         {
             // Act
-            var entities = Service.Get().Result;
+            var entities = Service.GetAsync().Result;
             // Assert
             Repository.Verify(x => x.GetAll(), Times.Once);
             Assert.Equal(1, entities.Count());
@@ -119,7 +119,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
             // Assert
             Repository.Verify(x => x.GetById(It.IsAny<int>()), Times.Once);
             Repository.Verify(x => x.Insert(It.IsAny<Course>()), Times.Once);
-            var entities = Service.Get().Result;
+            var entities = Service.GetAsync().Result;
             Assert.Equal(2, entities.Count());
         }
 

@@ -1,45 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.Models;
 
 namespace Blog.Turnmeup.DL.Services
 {
-    public class CourseService : IBaseService<Course>, ICourseService
+    public class CourseService :  ICourseService
     {
-        private readonly IBaseService<Course> _courseService;
+        private readonly IBaseService<Course> _service;
+        private readonly IMapper _mapper;
 
-        public CourseService(IBaseService<Course> courseService)
+
+        public CourseService(IBaseService<Course> service, IMapper mapper)
         {
-            _courseService = courseService;
+            _service = service;
+            _mapper = mapper;
         }
 
-
-        public Task<IEnumerable<Course>> Get()
+        public async Task<IEnumerable<CourseResponseModel>> GetAsync()
         {
-            return _courseService.Get();
+            var result = await _service.GetAsync();
+            return result.Select(t => _mapper.Map<Course, CourseResponseModel>(t));
         }
 
-        public Task<Course> GetById(int id)
+        public async Task<CourseResponseModel> GetById(int id)
         {
-            return _courseService.GetById(id);
+            return _mapper.Map<Course, CourseResponseModel>(await _service.GetById(id));
         }
 
-        public IEnumerable<Course> Where(Expression<Func<Course, bool>> exp)
+        public IEnumerable<CourseResponseModel> Where(Expression<Func<Course, bool>> exp)
         {
-            return _courseService.Where(exp);
+            var whereResult = _service.Where(exp).ToList();
+            return _mapper.Map<List<Course>, List<CourseResponseModel>>(whereResult).AsEnumerable();
         }
 
-        public void AddOrUpdate(Course entry)
+        public void AddOrUpdate(CourseResponseModel entry)
         {
-            _courseService.AddOrUpdate(entry);
+            _service.AddOrUpdate(_mapper.Map<CourseResponseModel, Course>(entry));
         }
 
         public void Remove(int id)
         {
-            _courseService.Remove(id);
+            _service.Remove(id);
         }
     }
 }

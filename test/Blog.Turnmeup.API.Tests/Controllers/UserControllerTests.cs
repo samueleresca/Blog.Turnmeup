@@ -106,10 +106,8 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
 
 
-
-
         [Theory]
-        [InlineData("test@test.it", "password", "Test user")]
+        [InlineData("test@test.it", "password", "Test")]
         public async Task Update(string email, string password, string name)
         {
             //Act

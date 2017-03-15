@@ -66,7 +66,7 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
             //SERVICES CONFIGURATIONS
             var baseService= new BaseService<Course>(Repository.Object);
-            Service = new CourseService(baseService);
+            Service = new CourseService(baseService, imapper);
             Controller = new CoursesController(Service, imapper, ierrorHandler);
         }
 

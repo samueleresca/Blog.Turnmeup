@@ -9,7 +9,7 @@ namespace Blog.Turnmeup.DL.Services
     public interface IBaseService<T> where T : BaseEntity
     {
 
-        Task<IEnumerable<T>>  Get();
+        Task<IEnumerable<T>>  GetAsync();
 
         Task<T> GetById(int id);
 
