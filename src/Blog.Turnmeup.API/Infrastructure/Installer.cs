@@ -1,4 +1,5 @@
 ﻿using Blog.Turnmeup.Contexts;
+using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Infrastructure.ErrorHandler;
 using Blog.Turnmeup.DL.Repositories;
 using Blog.Turnmeup.DL.Services;

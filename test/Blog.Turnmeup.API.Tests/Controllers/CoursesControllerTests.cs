@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Blog.Turnmeup.API.Controllers;
 using Blog.Turnmeup.API.Models.Courses;
+using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Infrastructure.ErrorHandler;
 using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Repositories;

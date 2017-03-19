@@ -1,5 +1,7 @@
 ﻿
-namespace Blog.Turnmeup.Models
+using Blog.Turnmeup.Models;
+
+namespace Blog.Turnmeup.DAL.Models
 {
     public class Course : BaseEntity
     {

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Blog.Turnmeup.API;
+using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Repositories;
 using Blog.Turnmeup.DL.Services;

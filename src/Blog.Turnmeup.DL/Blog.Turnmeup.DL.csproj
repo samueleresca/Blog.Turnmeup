@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <Reference Include="AutoMapper">
-      <HintPath>..\..\..\..\..\.nuget\packages\automapper\5.2.0\lib\netstandard1.3\AutoMapper.dll</HintPath>
+      <HintPath>C:\Users\samueleresca\.nuget\packages\automapper\5.2.0\lib\netstandard1.3\AutoMapper.dll</HintPath>
     </Reference>
   </ItemGroup>
 

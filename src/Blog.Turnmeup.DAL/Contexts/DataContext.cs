@@ -1,4 +1,5 @@
-﻿using Blog.Turnmeup.Models;
+﻿using Blog.Turnmeup.DAL.Models;
+using Blog.Turnmeup.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Turnmeup.Contexts

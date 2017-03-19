@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Blog.Turnmeup.DAL.Models;
 using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.Models;
 
