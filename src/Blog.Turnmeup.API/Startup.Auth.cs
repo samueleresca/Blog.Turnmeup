@@ -25,14 +25,8 @@ namespace Blog.Turnmeup.API
                 options.UseOpenIddict();
             });
 
-            // Register the Identity services.
-            services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddDefaultTokenProviders();
 
             // Register the OpenIddict services.
-            // Note: use the generic overload if you need
-            // to replace the default OpenIddict entities.
             services.AddOpenIddict(options =>
             {
                 // Register the Entity Framework stores.
@@ -53,8 +47,11 @@ namespace Blog.Turnmeup.API
                 options.DisableHttpsRequirement();
             });
 
-           // TODO: Enable services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
-           // services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+            // TODO: Inject custom validation 
+            // services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+            // services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+
+            // Register the Identity services.
             services.AddIdentity<AppUser, IdentityRole>(opts => {
                 opts.Password.RequiredLength = 6;
                 opts.Password.RequireNonAlphanumeric = false;
