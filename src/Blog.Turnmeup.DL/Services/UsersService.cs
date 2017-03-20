@@ -30,53 +30,53 @@ namespace Blog.Turnmeup.DL.Services
             _signInManager = signInManager;
         }
 
-        public IQueryable<UserResponseModel> Get()
+        public IQueryable<UserModel> Get()
         {
 
-            var returnedList = new List<UserResponseModel>();
+            var returnedList = new List<UserModel>();
             _repository.Get().ToList().ForEach(u =>
             {
-                returnedList.Add(_mapper.Map<AppUser, UserResponseModel>(u));
+                returnedList.Add(_mapper.Map<AppUser, UserModel>(u));
             });
 
             return returnedList.AsQueryable();
         }
 
-        public UserResponseModel GetByEmail(string email)
+        public UserModel GetByEmail(string email)
         {
-            return _mapper.Map<AppUser, UserResponseModel>(_repository.GetByEmail(email));
+            return _mapper.Map<AppUser, UserModel>(_repository.GetByEmail(email));
         }
 
-        public Task<IdentityResult> Create(UserResponseModel user, string password)
+        public Task<IdentityResult> Create(UserModel user, string password)
         {
-            return _repository.Create(_mapper.Map<AppUser, UserResponseModel>(user), password);
+            return _repository.Create(_mapper.Map<AppUser, UserModel>(user), password);
         }
 
-        public async Task<IdentityResult> Delete(UserResponseModel user)
+        public async Task<IdentityResult> Delete(UserModel user)
         {
-            return await _repository.Delete(_mapper.Map<AppUser, UserResponseModel>(user));
+            return await _repository.Delete(_mapper.Map<AppUser, UserModel>(user));
         }
 
-        public  async Task<IdentityResult> Update(UserResponseModel user)
+        public  async Task<IdentityResult> Update(UserModel user)
         {
-            return await _repository.Update(_mapper.Map<AppUser, UserResponseModel>(user));
+            return await _repository.Update(_mapper.Map<AppUser, UserModel>(user));
         }
 
-        public async Task<IdentityResult> ValidatePassword(UserResponseModel user, string password)
+        public async Task<IdentityResult> ValidatePassword(UserModel user, string password)
         {
-            var appUser = _mapper.Map<AppUser, UserResponseModel>(user);
+            var appUser = _mapper.Map<AppUser, UserModel>(user);
            return await _passwordValidator.ValidateAsync(_repository.GetUserManager(), appUser, password);
         }
 
-        public async Task<IdentityResult> ValidateUser(UserResponseModel user)
+        public async Task<IdentityResult> ValidateUser(UserModel user)
         {
-            var appUser = _mapper.Map<AppUser, UserResponseModel>(user);
+            var appUser = _mapper.Map<AppUser, UserModel>(user);
             return await _userValidator.ValidateAsync(_repository.GetUserManager(), appUser);
         }
 
-        public  string HashPassword(UserResponseModel user, string password)
+        public  string HashPassword(UserModel user, string password)
         {
-            var appUser = _mapper.Map<AppUser, UserResponseModel>(user);
+            var appUser = _mapper.Map<AppUser, UserModel>(user);
             return  _passwordHasher.HashPassword( appUser, password);
         }
 
@@ -85,9 +85,9 @@ namespace Blog.Turnmeup.DL.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<SignInResult> PasswordSignInAsync(UserResponseModel user, string password, bool lockoutOnFailure, bool isPersistent)
+        public async Task<SignInResult> PasswordSignInAsync(UserModel user, string password, bool lockoutOnFailure, bool isPersistent)
         {
-            var appUser = _mapper.Map<AppUser, UserResponseModel>(user);
+            var appUser = _mapper.Map<AppUser, UserModel>(user);
            return  await _signInManager.PasswordSignInAsync(appUser, password,  isPersistent, lockoutOnFailure);
         }
 

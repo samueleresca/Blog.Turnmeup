@@ -14,11 +14,11 @@ namespace Blog.Turnmeup.API.Infrastructure
             CreateMap<Course, CourseResponseModel>();
             CreateMap<CourseResponseModel, Course>();
 
-            CreateMap<UserResponseModel, AppUser>();
-            CreateMap<AppUser, UserResponseModel>();
+            CreateMap<UserModel, AppUser>();
+            CreateMap<AppUser, UserModel>();
 
-            CreateMap<UserManager<UserResponseModel>, UserManager<AppUser>>();
-            CreateMap<UserManager<AppUser>, UserManager<UserResponseModel>>();
+            CreateMap<UserManager<UserModel>, UserManager<AppUser>>();
+            CreateMap<UserManager<AppUser>, UserManager<UserModel>>();
         }
     }
 }

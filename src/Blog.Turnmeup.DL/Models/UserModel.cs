@@ -2,7 +2,7 @@
 
 namespace Blog.Turnmeup.DL.Models
 {
-    public class UserResponseModel : AppUser
+    public class UserModel : AppUser
     {
     }
 }

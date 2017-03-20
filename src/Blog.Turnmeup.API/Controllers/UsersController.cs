@@ -33,13 +33,13 @@ namespace Blog.Turnmeup.API.Controllers
         }
 
         [HttpGet]
-        public List<UserResponseModel> Get()
+        public List<UserModel> Get()
         {
             return _usersService.Get().ToList();
         }
 
         [HttpPost("/api/[controller]/login")]
-        public async Task<UserResponseModel> Login([FromBody]LoginRequestModel loginModel)
+        public async Task<UserModel> Login([FromBody]LoginRequestModel loginModel)
         {
 
             if (!ModelState.IsValid)
@@ -65,14 +65,14 @@ namespace Blog.Turnmeup.API.Controllers
         }
 
         [HttpGet("{email}")]
-        public UserResponseModel Get(string email)
+        public UserModel Get(string email)
         {
             return _usersService.GetByEmail(email);
         }
 
 
         [HttpPost("/api/[controller]/create")]
-        public async Task<UserResponseModel> Create([FromBody]CreateRequestModel model)
+        public async Task<UserModel> Create([FromBody]CreateRequestModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace Blog.Turnmeup.API.Controllers
                     _errorHandler.GetMessage(ErrorMessagesEnum.ModelValidation),
                     ModelState.Values.First().Errors.First().ErrorMessage));
             }
-            var user = new UserResponseModel
+            var user = new UserModel
             {
                 UserName = model.Name,
                 Email = model.Email
@@ -97,7 +97,7 @@ namespace Blog.Turnmeup.API.Controllers
 
 
         [HttpPost("/api/[controller]/delete")]
-        public async Task<UserResponseModel> Delete([FromBody] DeleteRequestModel model)
+        public async Task<UserModel> Delete([FromBody] DeleteRequestModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -120,7 +120,7 @@ namespace Blog.Turnmeup.API.Controllers
         }
 
         [HttpPost]
-        public async Task<UserResponseModel> Edit(string email,
+        public async Task<UserModel> Edit(string email,
             string password)
         {
             var user = _usersService.GetByEmail(email);

@@ -98,7 +98,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void InsertUser()
         {
             // Arrange
-            var user = new UserResponseModel
+            var user = new UserModel
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "testusername2",
@@ -117,7 +117,7 @@ namespace Blog.Turnmeup.DL.Tests.Services
         public void UpdateUser()
         {
             // Arrange
-            var user = new UserResponseModel
+            var user = new UserModel
             {
                 Id = UniqueId,
                 UserName = "testusername",
