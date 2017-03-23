@@ -8,7 +8,7 @@ namespace Blog.Turnmeup.API.Tests
     public class TestFixture<TStartup> : IDisposable where TStartup : class
     {
         public readonly TestServer Server;
-        private readonly HttpClient Client;
+        private readonly HttpClient _client;
 
 
         public TestFixture()
@@ -18,13 +18,13 @@ namespace Blog.Turnmeup.API.Tests
                 .UseStartup<TStartup>();
 
             Server = new TestServer(builder);
-            Client = new HttpClient();
+            _client = new HttpClient();
         }
 
 
         public void Dispose()
         {
-            Client.Dispose();
+            _client.Dispose();
             Server.Dispose();
         }
     }

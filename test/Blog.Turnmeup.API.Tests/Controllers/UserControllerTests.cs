@@ -28,9 +28,9 @@ namespace Blog.Turnmeup.API.Tests.Controllers
         public UserControllerTests(TestFixture<Startup> fixture)
         {
 
-            var users = new List<AppUser>
+            var users = new List<UserModel>
             {
-                new AppUser
+                new UserModel
                 {
                     UserName = "Test",
                     Id = Guid.NewGuid().ToString(),
@@ -44,11 +44,11 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             fakeUserManager.Setup(x => x.Users)
                 .Returns(users);
 
-            fakeUserManager.Setup(x => x.DeleteAsync(It.IsAny<AppUser>()))
+            fakeUserManager.Setup(x => x.DeleteAsync(It.IsAny<UserModel>()))
              .ReturnsAsync(IdentityResult.Success);
-            fakeUserManager.Setup(x => x.CreateAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
+            fakeUserManager.Setup(x => x.CreateAsync(It.IsAny<UserModel>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);
-            fakeUserManager.Setup(x => x.UpdateAsync(It.IsAny<AppUser>()))
+            fakeUserManager.Setup(x => x.UpdateAsync(It.IsAny<UserModel>()))
           .ReturnsAsync(IdentityResult.Success);
 
 
@@ -57,13 +57,19 @@ namespace Blog.Turnmeup.API.Tests.Controllers
 
             var mapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
             var errorHandler = (IErrorHandler)fixture.Server.Host.Services.GetService(typeof(IErrorHandler));
-            var uservalidator = (IUserValidator<AppUser>)fixture.Server.Host.Services.GetService(typeof(IUserValidator<AppUser>));
-            var passwordvalidator = (IPasswordValidator<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordValidator<AppUser>));
             var passwordhasher = (IPasswordHasher<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordHasher<AppUser>));
             var signInManager = (SignInManager<AppUser>)fixture.Server.Host.Services.GetService(typeof(SignInManager<AppUser>));
 
+
+            var uservalidator = new Mock<IUserValidator<AppUser>>();
+            uservalidator.Setup(x => x.ValidateAsync(It.IsAny<UserManager<AppUser>>(), It.IsAny<AppUser>()))
+             .ReturnsAsync(IdentityResult.Success);
+            var passwordvalidator = new Mock<IPasswordValidator<AppUser>>();
+            passwordvalidator.Setup(x => x.ValidateAsync(It.IsAny<UserManager<AppUser>>(), It.IsAny<AppUser>(), It.IsAny<string>()))
+             .ReturnsAsync(IdentityResult.Success);
+
             //SERVICES CONFIGURATIONS
-            Service = new UsersService(Repository, mapper, uservalidator, passwordvalidator, passwordhasher, signInManager);
+            Service = new UsersService(Repository, mapper, uservalidator.Object, passwordvalidator.Object, passwordhasher, signInManager);
             Controller = new UsersController(Service, errorHandler);
         }
 
