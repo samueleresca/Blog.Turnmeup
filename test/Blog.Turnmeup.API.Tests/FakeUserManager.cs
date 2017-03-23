@@ -25,15 +25,5 @@ namespace Blog.Turnmeup.API.Tests
         { }
 
 
-        public override Task<IdentityResult> CreateAsync(AppUser user, string password)
-        {
-            return Task.FromResult(IdentityResult.Success);
-        }
-
-        public override Task<IdentityResult> UpdateAsync(AppUser user)
-        {
-            return Task.FromResult(IdentityResult.Success);
-        }
-
     }
 }
