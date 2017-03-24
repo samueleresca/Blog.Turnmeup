@@ -163,7 +163,7 @@ namespace Blog.Turnmeup.API.Controllers
 
         }
 
-        [HttpPost(), Produces("application/json")]
+        [HttpPost, Produces("application/json")]
         public async Task<SignInResult> Token(TokenRequestModel request)
         {
 
