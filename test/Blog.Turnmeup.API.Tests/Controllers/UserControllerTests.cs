@@ -117,8 +117,15 @@ namespace Blog.Turnmeup.API.Tests.Controllers
         [InlineData("test@test.it", "password", "Test")]
         public async Task Update(string email, string password, string name)
         {
+            //Arrange
+            var testUser = new UpdateRequestModel
+            {
+                Email = email,
+                Password = password
+            };
+
             //Act
-            var updated = await Controller.Edit(email, password);
+            var updated = await Controller.Edit(testUser);
             // Assert
             Assert.Equal(email, updated.Email);
         }

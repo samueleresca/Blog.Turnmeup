@@ -13,6 +13,7 @@ using Blog.Turnmeup.DL.Models;
 using Blog.Turnmeup.DL.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SignInResult = Microsoft.AspNetCore.Mvc.SignInResult;
 
 namespace Blog.Turnmeup.API.Controllers
 {
@@ -120,14 +121,11 @@ namespace Blog.Turnmeup.API.Controllers
         }
 
         [HttpPost]
-        public async Task<UserModel> Edit(string email,
-            string password)
+        public async Task<UserModel> Edit([FromBody] UpdateRequestModel request)
         {
-            var user = _usersService.GetByEmail(email);
+            var user = _usersService.GetByEmail(request.Email);
 
             if (user == null) throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthUserDoesNotExists));
-
-            user.Email = email;
 
             var validEmail = await _usersService.ValidateUser(user);
 
@@ -138,20 +136,20 @@ namespace Blog.Turnmeup.API.Controllers
 
             IdentityResult validPass = null;
 
-            if (!string.IsNullOrEmpty(password))
+            if (!string.IsNullOrEmpty(request.Password))
             {
-                validPass = await _usersService.ValidatePassword(user, password);
+                validPass = await _usersService.ValidatePassword(user, request.Password);
                 if (validPass.Succeeded)
                 {
                     user.PasswordHash = _usersService.HashPassword(user,
-                        password);
+                        request.Password);
                 }
                 else
                 {
                     _errorHandler.ErrorIdentityResult(validPass);
                 }
             }
-            if (validPass != null && ((!validEmail.Succeeded || password == string.Empty || !validPass.Succeeded)))
+            if (validPass != null && ((!validEmail.Succeeded || request.Password == string.Empty || !validPass.Succeeded)))
                 throw new HttpRequestException(_errorHandler.GetMessage(ErrorMessagesEnum.AuthNotValidInformations));
 
             var result = await _usersService.Update(user);
@@ -166,7 +164,7 @@ namespace Blog.Turnmeup.API.Controllers
         }
 
         [HttpPost(), Produces("application/json")]
-        public async Task<IActionResult> Token(TokenRequestModel request)
+        public async Task<SignInResult> Token(TokenRequestModel request)
         {
 
             if (!ModelState.IsValid)
