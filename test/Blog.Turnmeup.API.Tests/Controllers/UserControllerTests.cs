@@ -58,7 +58,6 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             var mapper = (IMapper)fixture.Server.Host.Services.GetService(typeof(IMapper));
             var errorHandler = (IErrorHandler)fixture.Server.Host.Services.GetService(typeof(IErrorHandler));
             var passwordhasher = (IPasswordHasher<AppUser>)fixture.Server.Host.Services.GetService(typeof(IPasswordHasher<AppUser>));
-            var signInManager = (SignInManager<AppUser>)fixture.Server.Host.Services.GetService(typeof(SignInManager<AppUser>));
 
 
             var uservalidator = new Mock<IUserValidator<AppUser>>();
@@ -68,8 +67,15 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             passwordvalidator.Setup(x => x.ValidateAsync(It.IsAny<UserManager<AppUser>>(), It.IsAny<AppUser>(), It.IsAny<string>()))
              .ReturnsAsync(IdentityResult.Success);
 
+            var signInManager = new Mock<FakeSignInManager>();
+
+            signInManager.Setup(
+                    x => x.PasswordSignInAsync(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .ReturnsAsync(SignInResult.Success);
+
+
             //SERVICES CONFIGURATIONS
-            Service = new UsersService(Repository, mapper, uservalidator.Object, passwordvalidator.Object, passwordhasher, signInManager);
+            Service = new UsersService(Repository, mapper, uservalidator.Object, passwordvalidator.Object, passwordhasher, signInManager.Object);
             Controller = new UsersController(Service, errorHandler);
         }
 
@@ -146,11 +152,22 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             Assert.Equal(email, deleted.Email);
         }
 
-
-        public void Token(string email, string password)
+        [Theory]
+        [InlineData("test@test.it", "Ciao.Ciao")]
+        public async Task TokenAsync(string email, string password)
         {
+            //Arrange
+            var testUser = new TokenRequestModel
+            {
+                Username = email,
+                Password = password
+            };
 
-            Assert.Equal(true, true);
+            //Act
+            var updated = await Controller.Token(testUser);
+            // Assert
+            Assert.NotNull(updated);
+           
         }
     }
 }
