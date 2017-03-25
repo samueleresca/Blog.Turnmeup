@@ -145,5 +145,12 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             //Assert
             Assert.Equal(email, deleted.Email);
         }
+
+
+        public void Token(string email, string password)
+        {
+
+            Assert.Equal(true, true);
+        }
     }
 }

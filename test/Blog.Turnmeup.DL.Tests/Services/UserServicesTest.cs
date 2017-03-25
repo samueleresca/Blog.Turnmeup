@@ -149,7 +149,5 @@ namespace Blog.Turnmeup.DL.Tests.Services
             Assert.Equal(0, Service.Get().Count());
         }
 
-
-
     }
 }
