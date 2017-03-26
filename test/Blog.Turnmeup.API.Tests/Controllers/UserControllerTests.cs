@@ -167,7 +167,6 @@ namespace Blog.Turnmeup.API.Tests.Controllers
             var updated = await Controller.Token(testUser);
             // Assert
             Assert.Equal("Test", updated.Principal.Identity.Name);
-           
         }
     }
 }

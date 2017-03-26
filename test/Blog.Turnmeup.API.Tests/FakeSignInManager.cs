@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Blog.Turnmeup.DAL.Models;
-using Blog.Turnmeup.DL.Models;
+﻿using Blog.Turnmeup.DAL.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +17,5 @@ namespace Blog.Turnmeup.API.Tests
                   new Mock<IOptions<IdentityOptions>>().Object,
                   new Mock<ILogger<SignInManager<AppUser>>>().Object )
         { }
-
-
     }
 }

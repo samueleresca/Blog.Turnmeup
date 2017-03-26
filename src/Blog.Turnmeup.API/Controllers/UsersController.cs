@@ -194,9 +194,9 @@ namespace Blog.Turnmeup.API.Controllers
                 OpenIdConnectConstants.Destinations.AccessToken);
             identity.AddClaim(OpenIdConnectConstants.Claims.Name, user.UserName,
                 OpenIdConnectConstants.Destinations.AccessToken);
-            // ... add other claims, if necessary.
+
+
             var principal = new ClaimsPrincipal(identity);
-            // Ask OpenIddict to generate a new token and return an OAuth2 token response.
             return SignIn(principal, OpenIdConnectServerDefaults.AuthenticationScheme);
         }
     }
